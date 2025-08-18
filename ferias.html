@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EXTRANEF - Gestão de Férias</title>
+    <link rel="stylesheet" href="style-electron.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <h1><i class="fas fa-umbrella-beach"></i> Gestão de Férias</h1>
+        <nav class="nav">
+          <a href="index-electron.html" class="nav-link"
+            ><i class="fas fa-home"></i> Início</a
+          >
+          <a href="funcionarios.html" class="nav-link"
+            ><i class="fas fa-users"></i> Funcionários</a
+          >
+          <a href="faltas.html" class="nav-link"
+            ><i class="fas fa-calendar-times"></i> Faltas</a
+          >
+          <a href="ferias.html" class="nav-link active"
+            ><i class="fas fa-umbrella-beach"></i> Férias</a
+          >
+          <a href="atestados.html" class="nav-link"
+            ><i class="fas fa-file-medical"></i> Atestados</a
+          >
+          <a href="adm-electron.html" class="nav-link"
+            ><i class="fas fa-cog"></i> Administração</a
+          >
+        </nav>
+      </header>
+
+      <!-- Conteúdo Principal -->
+      <main class="main-content">
+        <!-- Estatísticas -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-umbrella-beach"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total de Férias</h3>
+              <p class="stat-number" id="totalFerias">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Este Mês</h3>
+              <p class="stat-number" id="feriasMes">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Dias Médios</h3>
+              <p class="stat-number" id="diasMedios">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Funcionários</h3>
+              <p class="stat-number" id="totalFuncionarios">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="abrirModalFerias()">
+            <i class="fas fa-plus"></i> Nova Férias
+          </button>
+          <button class="btn btn-success" onclick="exportarFerias()">
+            <i class="fas fa-download"></i> Exportar Relatório
+          </button>
+          <button class="btn btn-info" onclick="importarFerias()">
+            <i class="fas fa-upload"></i> Importar Dados
+          </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters">
+          <div class="filter-group">
+            <label for="filtroFuncionario">Funcionário:</label>
+            <select id="filtroFuncionario" onchange="filtrarFerias()">
+              <option value="">Todos os funcionários</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtroPeriodo">Período:</label>
+            <select id="filtroPeriodo" onchange="filtrarFerias()">
+              <option value="">Todos os períodos</option>
+              <option value="7">Próximos 7 dias</option>
+              <option value="30">Próximos 30 dias</option>
+              <option value="90">Próximos 90 dias</option>
+              <option value="365">Próximo ano</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtroStatus">Status:</label>
+            <select id="filtroStatus" onchange="filtrarFerias()">
+              <option value="">Todos os status</option>
+              <option value="planejada">Planejada</option>
+              <option value="em_andamento">Em Andamento</option>
+              <option value="concluida">Concluída</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="buscaFerias">Buscar:</label>
+            <input
+              type="text"
+              id="buscaFerias"
+              placeholder="Observações, local..."
+              onkeyup="filtrarFerias()"
+            />
+          </div>
+        </div>
+
+        <!-- Tabela de Férias -->
+        <div class="table-container">
+          <table class="data-table" id="tabelaFerias">
+            <thead>
+              <tr>
+                <th>Funcionário</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Dias</th>
+                <th>Status</th>
+                <th>Tipo</th>
+                <th>Local</th>
+                <th>Observações</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyFerias">
+              <!-- Dados serão carregados dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal Férias -->
+    <div id="modalFerias" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalFeriasTitulo">Nova Férias</h2>
+          <span class="close" onclick="fecharModalFerias()">&times;</span>
+        </div>
+        <form id="formFerias" onsubmit="salvarFerias(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="funcionarioId">Funcionário *</label>
+              <select
+                id="funcionarioId"
+                name="funcionarioId"
+                required
+                onchange="carregarDadosFuncionario()"
+              >
+                <option value="">Selecione um funcionário</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tipoFerias">Tipo de Férias *</label>
+              <select id="tipoFerias" name="tipoFerias" required>
+                <option value="">Selecione o tipo</option>
+                <option value="normais">Férias Normais</option>
+                <option value="proporcionais">Férias Proporcionais</option>
+                <option value="coletivas">Férias Coletivas</option>
+                <option value="antecipadas">Férias Antecipadas</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dataInicio">Data de Início *</label>
+              <input
+                type="date"
+                id="dataInicio"
+                name="dataInicio"
+                required
+                onchange="calcularDias()"
+              />
+            </div>
+            <div class="form-group">
+              <label for="dataFim">Data de Fim *</label>
+              <input
+                type="date"
+                id="dataFim"
+                name="dataFim"
+                required
+                onchange="calcularDias()"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dias">Total de Dias</label>
+              <input type="number" id="dias" name="dias" readonly />
+            </div>
+            <div class="form-group">
+              <label for="status">Status *</label>
+              <select id="status" name="status" required>
+                <option value="">Selecione o status</option>
+                <option value="planejada">Planejada</option>
+                <option value="em_andamento">Em Andamento</option>
+                <option value="concluida">Concluída</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="local">Local das Férias</label>
+              <input
+                type="text"
+                id="local"
+                name="local"
+                placeholder="Ex: Praia, Montanha, Casa..."
+              />
+            </div>
+            <div class="form-group">
+              <label for="valorAbono">Valor do Abono (R$)</label>
+              <input
+                type="number"
+                id="valorAbono"
+                name="valorAbono"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="observacoes">Observações</label>
+            <textarea
+              id="observacoes"
+              name="observacoes"
+              rows="3"
+              placeholder="Informações adicionais sobre as férias..."
+            ></textarea>
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="fecharModalFerias()"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="ui.js"></script>
+    <script src="database.js"></script>
+    <script src="ferias.js"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "name": "extranef-app",
+  "version": "1.0.0",
+  "description": "Sistema de gestão de produtividade, comissão e controle de pessoal",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never",
+    "pack:dir": "electron-builder --dir",
+    "pack:dir:alt": "electron-packager . EXTRANEF --platform=win32 --arch=x64 --out=dist --overwrite --prune --asar",
+    "pack:zip": "powershell -NoProfile -ExecutionPolicy Bypass -Command Compress-Archive -Path dist/win-unpacked/* -DestinationPath dist/EXTRANEF-win-unpacked.zip -Force"
+  },
+  "keywords": [
+    "electron",
+    "produtividade",
+    "comissao",
+    "gestao"
+  ],
+  "author": "EXTRANEF",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "googleapis": "^137.0.0"
+  },
+  "build": {
+    "appId": "com.extranef.app",
+    "productName": "EXTRANEF",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/**/*",
+      "!dist/**/*",
+      "!package-lock.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "sign": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}
