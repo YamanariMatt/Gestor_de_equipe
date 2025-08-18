@@ -1,17 +1,22 @@
-# EXTRANEF - Sistema de Gestão
+# EXTRANEF – Gestão de Pessoal (Desktop Electron)
 
-Sistema desktop completo para gestão de produtividade, comissão e controle de pessoal, desenvolvido com Electron.
+Aplicativo desktop para gestão de equipe: cadastro de funcionários, controle de faltas, férias e atestados, com persistência local robusta, backup automático em pasta sincronizada e integração com Google Drive.
 
 ## 🚀 Funcionalidades
 
 ### ✨ Principais
 
-- **Gestão de Produtividade**: Acompanhe o desempenho da equipe
-- **Cálculo de Comissões**: Automático sobre valores recuperados (configurável)
-- **Controle de Pessoal**: Registre faltas, férias e atestados
-- **Ranking e Relatórios**: Visualize dados em tabelas organizadas
-- **Import/Export CSV**: Backup e restauração de dados
-- **Configurações Flexíveis**: Personalize comissões e tema visual
+- **Funcionários**: cadastro/edição, ativação/desativação, filtros e estatísticas
+- **Estruturas**: equipes, cargos, horários e tipos de contrato
+- **Faltas**: registro por tipo/período, filtros e exportação
+- **Férias**: períodos com status, filtros e exportação
+- **Atestados**: upload (PDF/PNG/JPG), visualização e gestão
+- **Persistência**: arquivo JSON em `userData` (fallback localStorage)
+- **Backup local**: espelho para pasta sincronizada (Drive/OneDrive/Dropbox desktop)
+- **Google Drive (OAuth)**:
+  - Atestados em `Atestados/<Nome do Funcionário>/`
+  - Relatórios de Faltas/Férias por período (Dia/Semana/Mês) para `Backups/Faltas` e `Backups/Ferias` (CSV/JSON), incluindo `funcionarioNome`
+- **Import/Export**: CSV/JSON por módulo
 
 ### 🎨 Interface
 
@@ -23,9 +28,8 @@ Sistema desktop completo para gestão de produtividade, comissão e controle de 
 
 ## 📋 Pré-requisitos
 
-- **Node.js** 16.0 ou superior
-- **npm** ou **yarn**
-- **Git** (para clonar o repositório)
+- **Node.js** 16+
+- **npm**
 
 ## 🛠️ Instalação
 
@@ -54,11 +58,9 @@ npm run dev
 npm start
 ```
 
-## 📦 Build da Aplicação
+## 📦 Build (Windows, sem admin)
 
-### Windows (sem perfil de administrador)
-
-1. Gerar pasta executável (sem instalar):
+1. Pasta executável (sem instalar):
 
 ```powershell
 npm run pack:dir
@@ -66,7 +68,7 @@ npm run pack:dir
 
 Resultado: `dist/win-unpacked/EXTRANEF.exe`
 
-2. Compactar para envio (opcional):
+2. ZIP para envio (opcional):
 
 ```powershell
 npm run pack:zip
@@ -74,32 +76,32 @@ npm run pack:zip
 
 Resultado: `dist/EXTRANEF-win-unpacked.zip`
 
-3. Instalador (opcional; pode disparar SmartScreen por falta de assinatura):
+3. Alternativa para ambientes restritos (sem symlink):
+
+```powershell
+npm run pack:dir:alt
+```
+
+Resultado: `dist/EXTRANEF-win32-x64/EXTRANEF.exe`
+
+4. Instalador (opcional; pode acionar SmartScreen):
 
 ```powershell
 npm run dist
 ```
 
-Resultado: `dist/EXTRANEF Setup x.y.z.exe`
-
-Observações:
-
-- A configuração `sign: false` evita etapas de assinatura que podem exigir privilégios.
-- Se o SmartScreen alertar, use “Executar mesmo assim”.
-
-## 🏗️ Estrutura do Projeto
+## 🏗️ Estrutura do Projeto (resumo)
 
 ```
 extranef/
-├── main.js                 # Processo principal do Electron
-├── preload.js             # Script de pré-carregamento
-├── package.json           # Configurações e dependências
-├── index-electron.html    # Página inicial
-├── adm-electron.html      # Página de administração
-├── script-electron.js     # Scripts principais
-├── style-electron.css     # Estilos atualizados
-├── assets/                # Ícones e recursos
-└── README.md              # Este arquivo
+├── main.js            # Processo principal (IPC, persistência, backup, Drive)
+├── preload.js         # Bridge segura (IPC) para o renderer
+├── database.js        # StorageAdapter (Electron IPC + localStorage)
+├── ui.js              # Toasts e integrações de menu/backup
+├── *-electron.html    # Páginas (início, adm, módulos)
+├── *.js               # Lógicas de cada página (funcionários, faltas, férias, atestados)
+├── style-electron.css # Estilos
+└── package.json
 ```
 
 ## 🎯 Como Usar
@@ -110,48 +112,23 @@ extranef/
 - Estatísticas em tempo real
 - Acesso rápido a todas as funcionalidades
 
-### 2. **Gestão de Produtividade**
-
-- Importe dados via CSV
-- Visualize ranking de colaboradores
-- Calcule comissões automaticamente
-
-### 3. **Controle de Pessoal**
+### 2. **Controle de Pessoal**
 
 - **Faltas**: Registre ausências com motivo e observações
 - **Férias**: Controle períodos de descanso
 - **Atestados**: Gerencie justificativas médicas
 
-### 4. **Configurações**
+### 3. **Configurações**
 
 - **Comissão**: Ajuste percentual (padrão: 0.18%)
 - **Tema**: Personalize cores da interface
 - **Backup**: Exporte/importe todos os dados
 - **Limpeza**: Remova dados específicos
 
-## 📊 Formato dos Dados
+## 📊 Exportações
 
-### CSV para Produtividade
-
-```csv
-Nome,Carteira,Valor Recuperado,Produtividade
-João Silva,12345,50000.00,95
-Maria Santos,67890,75000.00,98
-```
-
-### Estrutura de Registros
-
-```json
-{
-  "id": 1234567890,
-  "nome": "Nome do Colaborador",
-  "carteira": "12345",
-  "data": "2024-01-15",
-  "motivo": "Motivo da ausência",
-  "observacoes": "Observações adicionais",
-  "dataCriacao": "2024-01-15T10:30:00.000Z"
-}
-```
+- Relatórios para Drive: faltas/ferias dia/semana/mês (CSV/JSON)
+- Exportações individuais por tela (CSV/JSON)
 
 ## ⚙️ Configurações
 
@@ -174,10 +151,11 @@ Maria Santos,67890,75000.00,98
 ```bash
 npm start          # Executa a aplicação
 npm run dev        # Executa com DevTools abertas
-npm run build      # Gera executáveis
-npm run dist       # Build para distribuição
-npm run pack:dir   # Gera pasta win-unpacked (sem instalador)
-npm run pack:zip   # Gera zip do win-unpacked
+npm run build         # Gera executáveis
+npm run dist          # Build para distribuição
+npm run pack:dir      # Gera pasta win-unpacked (sem instalador)
+npm run pack:zip      # Gera zip do win-unpacked
+npm run pack:dir:alt  # Alternativa sem symlink
 ```
 
 ### Estrutura de Desenvolvimento
@@ -191,7 +169,7 @@ npm run pack:zip   # Gera zip do win-unpacked
 
 ### Menu da Aplicação
 
-- **Arquivo**: Importar/Exportar CSV, Sair
+- **Arquivo**: Importar/Exportar CSV, Configurar pasta de backup, Sair
 - **Visualizar**: Recarregar, Zoom, DevTools
 - **Ajuda**: Sobre o sistema
 
@@ -236,21 +214,11 @@ chmod +x dist/*/EXTRANEF
 - **Remote Module**: Desabilitado
 - **Preload Script**: Comunicação segura via IPC
 
-## 📈 Roadmap
+## ☁️ Google Drive (resumo)
 
-### Versão 1.1
-
-- [ ] Backup automático
-- [ ] Relatórios em PDF
-- [ ] Gráficos interativos
-- [ ] Múltiplos usuários
-
-### Versão 1.2
-
-- [ ] Sincronização em nuvem
-- [ ] API REST
-- [ ] Notificações push
-- [ ] Modo offline
+- Configure em Administração → Google Drive (Client ID, Secret, Folder ID)
+- Atestados sobem para `Atestados/<Nome do Funcionário>/`
+- Relatórios por período vão para `Backups/Faltas` e `Backups/Ferias`
 
 ## 🤝 Contribuição
 
@@ -268,7 +236,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 Para suporte técnico ou dúvidas:
 
-- **Email**: matheusvictormy.com
+- **Email**: matheusvictormy@gmail.com
 - **Documentação**: [Wiki do Projeto]
 - **Issues**: [GitHub Issues]
 
@@ -280,4 +248,4 @@ Para suporte técnico ou dúvidas:
 
 ---
 
-**EXTRANEF** - Transformando a gestão empresarial através da tecnologia.
+**EXTRANEF** – Gestão de Pessoal com backups confiáveis e integração em nuvem.
