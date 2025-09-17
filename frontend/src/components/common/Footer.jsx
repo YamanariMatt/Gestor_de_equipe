@@ -117,11 +117,9 @@ const Footer = () => {
               <span className="hidden sm:inline">Todos os direitos reservados</span>
             </div>
 
-            {/* Developer Credit */}
+            {/* Support Contact */}
             <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>Desenvolvido com</span>
-              <Heart className="h-4 w-4 text-red-500" />
-              <span>por</span>
+              <span>Suporte:</span>
               <a 
                 href="https://github.com/YamanariMatt"
                 target="_blank"

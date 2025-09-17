@@ -162,4 +162,5 @@ export const apiService = {
   health: () => api.get('/health'),
 }
 
+export { api }
 export default api

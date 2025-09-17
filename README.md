@@ -1,4 +1,13 @@
-# 🚀 NEF - Sistema de Gestão de Equipe
+# � Usuários de Teste
+
+Adicione o seguinte usuário de teste no Supabase Auth (Authentication > Users):
+
+| E-mail                          | UID                                   |
+|----------------------------------|---------------------------------------|
+| matheus.yamanari@extranef.com.br | cfdfd49f-2180-4c66-991e-392c0fff8f12  |
+
+> **Importante:** Defina a senha manualmente pelo painel do Supabase ou envie convite de redefinição de senha.
+# �🚀 NEF - Sistema de Gestão de Equipe
 
 > **Sistema web profissional para gestão completa de funcionários, faltas, férias e atestados com controle de acesso restrito**
 

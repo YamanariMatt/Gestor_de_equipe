@@ -1,8 +1,15 @@
+// Lista de e-mails autorizados para acesso
+const AUTHORIZED_USERS = [
+  'matheus.yamanari@extranef.com.br',
+  'felypesimones@nefadv.com.br',
+  // Adicione outros e-mails autorizados conforme necessário
+];
 // Serviço de controle de acesso restrito
 // Apenas supervisores e gestores autorizados têm acesso ao sistema NEF
 
 // Lista de emails autorizados para acesso ao sistema
 export const AUTHORIZED_EMAILS = [
+  'matheus.yamanari@extranef.com.br',
   'felypesimones@nefadv.com.br',
   'jose.silva@extranef.com.br',
   'juliogoncalves@nefadv.com.br',
@@ -29,7 +36,7 @@ export const AUTHORIZED_ROLES = ['supervisor', 'gestor', 'admin']
  */
 export const isEmailAuthorized = (email) => {
   if (!email) return false
-  return AUTHORIZED_USERS.includes(email.toLowerCase().trim())
+  return AUTHORIZED_EMAILS.includes(email.toLowerCase().trim())
 }
 
 /**

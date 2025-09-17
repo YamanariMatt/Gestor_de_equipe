@@ -28,6 +28,10 @@ INSERT INTO empresas (id, nome, cnpj, endereco, telefone, email) VALUES
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
 ('eb7d3ee6-a6a0-4910-98ba-0db599bee4a9', 'Felype Simões', 'felypesimones@nefadv.com.br', 'felypesimones', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
 
+-- Matheus Yamanari - (UID fornecido)
+INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
+('cfdfd49f-2180-4c66-991e-392c0fff8f12', 'Matheus Yamanari', 'matheus.yamanari@extranef.com.br', 'matheus.yamanari', '550e8400-e29b-41d4-a716-446655440000', 'admin', true, true);
+
 /*
 -- OUTROS USUÁRIOS - Adicione conforme criar no Supabase Auth:
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
