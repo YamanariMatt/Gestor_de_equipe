@@ -1,26 +1,24 @@
-# EXTRANEF – Gestão de Pessoal (Desktop Electron)
+# NEF - Sistema de Gestão de Equipe
 
-Aplicativo desktop para gestão de equipe: cadastro de funcionários, controle de faltas, férias e atestados, com persistência local robusta, backup automático em pasta sincronizada e integração com Google Drive.
+Sistema web moderno para gestão de funcionários, controle de faltas, férias e atestados médicos.
 
-## 🚀 Funcionalidades
+## 🚀 Sobre o Projeto
 
-### ✨ Principais
+O **NEF** é uma aplicação web completa para gestão de equipes, migrada do sistema desktop EXTRANEF para uma arquitetura moderna e escalável. O sistema oferece controle completo sobre funcionários, faltas, férias, atestados médicos e muito mais.
 
-- **Funcionários**: cadastro/edição, ativação/desativação, filtros e estatísticas
-- **Estruturas**: equipes, cargos, horários e tipos de contrato
-- **Faltas**: registro por tipo/período, filtros e exportação
-- **Férias**: períodos com status, filtros e exportação
-- **Atestados**: upload (PDF/PNG/JPG), visualização e gestão
-- **Persistência**: arquivo JSON em `userData` (fallback localStorage)
-- **Backup local**: espelho para pasta sincronizada (Drive/OneDrive/Dropbox desktop)
-- **Google Drive (OAuth)**:
-  - Atestados em `Atestados/<Nome do Funcionário>/`
-  - Relatórios de Faltas/Férias por período (Dia/Semana/Mês) para `Backups/Faltas` e `Backups/Ferias` (CSV/JSON), incluindo `funcionarioNome`
-- **Import/Export**: CSV/JSON por módulo
+## ✨ Funcionalidades
 
-### 🎨 Interface
+### 👥 **Gestão de Funcionários**
+- Cadastro completo com informações pessoais e profissionais
+- Organização por equipes e cargos
+- Controle de status (ativo/inativo)
+- Histórico completo de atividades
 
-- Design moderno e responsivo
+### 📅 **Controle de Faltas**
+- Registro de faltas, atrasos e saídas antecipadas
+- Sistema de aprovação/rejeição
+- Filtros avançados por período e funcionário
+- Relatórios detalhados
 - Tema escuro personalizável
 - Menu lateral intuitivo
 - Animações suaves
