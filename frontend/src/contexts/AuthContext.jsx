@@ -135,14 +135,33 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true)
-      
+
+      // Login fixo para desenvolvimento
+      if (email === 'admin@admin.com' && password === 'admin123') {
+        const fakeUser = {
+          id: 'dev-fake-id',
+          email: 'admin@admin.com',
+          nome: 'Administrador Dev',
+          profile: {
+            nome: 'Administrador Dev',
+            email: 'admin@admin.com',
+            role: 'admin',
+            ativo: true,
+            username: 'admin'
+          }
+        }
+        setUser(fakeUser)
+        toast.success('Login de desenvolvimento bem-sucedido!')
+        return { success: true, data: fakeUser }
+      }
+
       // Validação prévia: verificar se email está autorizado
       if (!isEmailAuthorized(email)) {
         logUnauthorizedAccess(email, 'Tentativa de login com email não autorizado')
         toast.error('Acesso negado. Apenas supervisores e gestores autorizados podem acessar o sistema.')
         return { success: false, error: 'Email não autorizado' }
       }
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -156,14 +175,14 @@ export const AuthProvider = ({ children }) => {
       return { success: true, data }
     } catch (error) {
       console.error('Erro no login:', error)
-      
+
       let message = 'Erro ao fazer login'
       if (error.message === 'Invalid login credentials') {
         message = 'Email ou senha incorretos'
       } else if (error.message === 'Email not confirmed') {
         message = 'Email não confirmado. Verifique sua caixa de entrada.'
       }
-      
+
       toast.error(message)
       return { success: false, error: message }
     } finally {
