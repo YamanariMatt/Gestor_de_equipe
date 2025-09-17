@@ -4,32 +4,75 @@
   "description": "NEF - Sistema de gestão de equipe - Monorepo Node.js + Frontend React",
   "main": "index.js",
   "scripts": {
+    "preinstall": "echo '🚀 Iniciando instalação do projeto NEF...'",
     "install:all": "npm install && npm run install:backend && npm run install:frontend",
     "install:backend": "cd backend && npm install",
     "install:frontend": "cd frontend && npm install",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "postinstall": "echo '✅ Instalação concluída! Execute npm run dev para iniciar o desenvolvimento.'",
+    
+    "dev": "concurrently --kill-others-on-fail --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --names \"BACKEND,FRONTEND\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "start": "npm run start:backend",
+    
+    "start": "concurrently --kill-others-on-fail --prefix-colors \"bgGreen.bold,bgCyan.bold\" --names \"BACKEND,FRONTEND\" \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm start",
-    "start:frontend": "cd frontend && npm start",
+    "start:frontend": "cd frontend && npm run preview",
+    
     "build": "npm run build:frontend",
     "build:frontend": "cd frontend && npm run build",
+    "build:all": "npm run build:frontend",
+    
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "cd backend && npm test",
-    "test:frontend": "cd frontend && npm test"
+    "test:frontend": "cd frontend && npm test",
+    "test:watch": "concurrently \"npm run test:backend -- --watch\" \"npm run test:frontend -- --watch\"",
+    
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:fix": "npm run lint:backend -- --fix && npm run lint:frontend -- --fix",
+    
+    "clean": "npm run clean:backend && npm run clean:frontend && rm -rf node_modules",
+    "clean:backend": "cd backend && rm -rf node_modules",
+    "clean:frontend": "cd frontend && rm -rf node_modules dist",
+    
+    "reset": "npm run clean && npm run install:all",
+    "setup": "npm run install:all && echo '🎉 Projeto configurado! Leia o README.md para próximos passos.'",
+    
+    "check": "npm run check:backend && npm run check:frontend",
+    "check:backend": "cd backend && npm audit",
+    "check:frontend": "cd frontend && npm audit"
   },
   "keywords": [
+    "nef",
     "web-app",
     "nodejs",
     "react",
     "supabase",
     "gestao",
     "equipe",
-    "funcionarios"
+    "funcionarios",
+    "rh",
+    "sistema-gestao"
   ],
-  "author": "EXTRANEF",
+  "author": {
+    "name": "Matheus Yamanari",
+    "email": "matheusvictormy@gmail.com",
+    "url": "https://github.com/YamanariMatt"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YamanariMatt/nef.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YamanariMatt/nef/issues"
+  },
+  "homepage": "https://github.com/YamanariMatt/nef#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },

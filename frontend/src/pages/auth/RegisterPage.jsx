@@ -42,10 +42,11 @@ const RegisterPage = () => {
                 O sistema <strong>NEF</strong> possui acesso restrito. Apenas os seguintes usuários autorizados podem acessar:
               </p>
               <ul className="mt-2 list-disc list-inside space-y-1">
-                <li><strong>Felype Simões</strong> - Supervisor</li>
-                <li><strong>José Felipe</strong> - Gestor</li>
-                <li><strong>Maria Pereira</strong> - Gestora</li>
-                <li><strong>Júlio Gonçalves</strong> - Supervisor</li>
+                <li><strong>felypesimones@nefadv.com.br</strong> - Supervisor</li>
+                <li><strong>jose.silva@extranef.com.br</strong> - Supervisor</li>
+                <li><strong>juliogoncalves@nefadv.com.br</strong> - Gerente</li>
+                <li><strong>edielwinicius@nefadv.com.br</strong> - RH</li>
+                <li><strong>mariaoliveira@nefadv.com.br</strong> - Supervisor</li>
               </ul>
               <p className="mt-3">
                 Se você é um dos usuários autorizados, use suas credenciais para fazer login.

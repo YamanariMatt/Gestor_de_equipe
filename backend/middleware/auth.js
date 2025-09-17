@@ -34,9 +34,9 @@ const authenticateToken = async (req, res, next) => {
       return res.status(403).json({ error: 'Usuário desativado. Contate o administrador.' })
     }
 
-    // Verificar se usuário tem role autorizado (apenas supervisor ou gestor)
-    if (!['supervisor', 'gestor', 'admin'].includes(profile.role)) {
-      return res.status(403).json({ error: 'Acesso negado. Apenas supervisores e gestores têm acesso ao sistema.' })
+    // Verificar se usuário tem role autorizado (supervisor, gestor, gerente, rh ou admin)
+    if (!['supervisor', 'gestor', 'gerente', 'rh', 'admin'].includes(profile.role)) {
+      return res.status(403).json({ error: 'Acesso negado. Apenas supervisores, gestores, gerentes e RH têm acesso ao sistema.' })
     }
 
     // Atualizar último login
@@ -69,21 +69,22 @@ const requireSupervisor = (req, res, next) => {
   next()
 }
 
-// Middleware para verificar se é gestor, supervisor ou admin
+// Middleware para verificar se é gestor, supervisor, gerente, rh ou admin
 const requireGestor = (req, res, next) => {
-  if (!['gestor', 'supervisor', 'admin'].includes(req.user.profile.role)) {
-    return res.status(403).json({ error: 'Acesso negado. Permissão de gestor requerida.' })
+  if (!['gestor', 'supervisor', 'gerente', 'rh', 'admin'].includes(req.user.profile.role)) {
+    return res.status(403).json({ error: 'Acesso negado. Permissão de gestor, supervisor, gerente ou RH requerida.' })
   }
   next()
 }
 
 // Middleware para verificar acesso restrito (apenas usuários autorizados)
 const requireAuthorizedUser = (req, res, next) => {
-  const authorizedUsernames = [
-    'Felype.Simones',
-    'Jose.Felipe', 
-    'Maria.Pereira',
-    'Julio.Goncalves'
+  const authorizedEmails = [
+    'felypesimones@nefadv.com.br',
+    'jose.silva@extranef.com.br',
+    'juliogoncalves@nefadv.com.br',
+    'edielwinicius@nefadv.com.br',
+    'mariaoliveira@nefadv.com.br'
   ]
 
   const userProfile = req.user.profile
@@ -94,10 +95,11 @@ const requireAuthorizedUser = (req, res, next) => {
   }
 
   // Verificar se está na lista de usuários autorizados
-  if (!authorizedUsernames.includes(userProfile.username)) {
+  if (!authorizedEmails.includes(req.user.email)) {
     return res.status(403).json({ 
       error: 'Acesso negado. Usuário não autorizado para este sistema.',
-      message: 'Apenas supervisores e gestores autorizados têm acesso.'
+      message: 'Apenas supervisores e gestores autorizados têm acesso.',
+      authorizedEmails: authorizedEmails
     })
   }
 

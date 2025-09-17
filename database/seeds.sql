@@ -17,19 +17,23 @@ INSERT INTO empresas (id, nome, cnpj, endereco, telefone, email) VALUES
 
 -- Felype Simões - Supervisor
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('11111111-1111-1111-1111-111111111111', 'Felype Simões', 'felype.simones@nef.com.br', 'Felype.Simones', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
+('11111111-1111-1111-1111-111111111111', 'Felype Simões', 'felypesimones@nefadv.com.br', 'felypesimones', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
 
--- José Felipe - Gestor
+-- José Silva - Supervisor
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('22222222-2222-2222-2222-222222222222', 'José Felipe', 'jose.felipe@nef.com.br', 'Jose.Felipe', '550e8400-e29b-41d4-a716-446655440000', 'gestor', true, true);
+('22222222-2222-2222-2222-222222222222', 'José Silva', 'jose.silva@extranef.com.br', 'jose.silva', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
 
--- Maria Pereira - Gestora
+-- Júlio Gonçalves - Gerente
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('33333333-3333-3333-3333-333333333333', 'Maria Pereira', 'maria.pereira@nef.com.br', 'Maria.Pereira', '550e8400-e29b-41d4-a716-446655440000', 'gestor', true, true);
+('33333333-3333-3333-3333-333333333333', 'Júlio Gonçalves', 'juliogoncalves@nefadv.com.br', 'juliogoncalves', '550e8400-e29b-41d4-a716-446655440000', 'gerente', true, true);
 
--- Júlio Gonçalves - Supervisor
+-- Ediel Winicius - RH
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('44444444-4444-4444-4444-444444444444', 'Júlio Gonçalves', 'julio.goncalves@nef.com.br', 'Julio.Goncalves', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
+('44444444-4444-4444-4444-444444444444', 'Ediel Winicius', 'edielwinicius@nefadv.com.br', 'edielwinicius', '550e8400-e29b-41d4-a716-446655440000', 'rh', true, true);
+
+-- Maria Oliveira - Supervisor
+INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
+('55555555-5555-5555-5555-555555555555', 'Maria Oliveira', 'mariaoliveira@nefadv.com.br', 'mariaoliveira', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
 
 -- =====================================================
 -- EQUIPES DE EXEMPLO

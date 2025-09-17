@@ -1,6 +1,8 @@
 -- =====================================================
--- EXTRANEF - Esquema do Banco de Dados PostgreSQL
+-- NEF - Esquema do Banco de Dados PostgreSQL
 -- Sistema de Gestão de Equipe
+-- Versão: 2.0
+-- Data: 2024-01-17
 -- =====================================================
 
 -- Extensões necessárias
@@ -17,10 +19,26 @@ CREATE TABLE profiles (
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
     empresa_id UUID NOT NULL,
-    role VARCHAR(50) DEFAULT 'gestor' CHECK (role IN ('admin', 'supervisor', 'gestor')),
+    role VARCHAR(50) DEFAULT 'supervisor' CHECK (role IN ('admin', 'supervisor', 'gestor', 'gerente', 'rh')),
     ativo BOOLEAN DEFAULT true,
     primeiro_acesso BOOLEAN DEFAULT true,
     ultimo_login TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =====================================================
+-- TABELA: empresas
+-- Empresas/organizações do sistema
+-- =====================================================
+CREATE TABLE empresas (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cnpj VARCHAR(18) UNIQUE,
+    endereco TEXT,
+    telefone VARCHAR(20),
+    email VARCHAR(255),
+    ativo BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -33,7 +51,8 @@ CREATE TABLE equipes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
+    supervisor_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
     cor VARCHAR(7) DEFAULT '#3498db', -- Cor hexadecimal para identificação visual
     ativo BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -52,7 +71,7 @@ CREATE TABLE cargos (
     descricao TEXT,
     salario_base DECIMAL(10,2),
     nivel VARCHAR(50) CHECK (nivel IN ('junior', 'pleno', 'senior', 'coordenador', 'gerente', 'diretor')),
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     ativo BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -72,7 +91,7 @@ CREATE TABLE horarios (
     intervalo_inicio TIME,
     intervalo_fim TIME,
     dias_semana INTEGER[] DEFAULT '{1,2,3,4,5}', -- 1=Segunda, 7=Domingo
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     ativo BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -100,7 +119,7 @@ CREATE TABLE funcionarios (
     horario_id UUID REFERENCES horarios(id) ON DELETE SET NULL,
     salario DECIMAL(10,2),
     tipo_contrato VARCHAR(50) DEFAULT 'clt' CHECK (tipo_contrato IN ('clt', 'pj', 'estagiario', 'terceirizado')),
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     ativo BOOLEAN DEFAULT true,
     observacoes TEXT,
     foto_url TEXT,
@@ -128,7 +147,7 @@ CREATE TABLE faltas (
     aprovado BOOLEAN,
     aprovado_por UUID REFERENCES profiles(id),
     aprovado_em TIMESTAMP WITH TIME ZONE,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
@@ -154,7 +173,7 @@ CREATE TABLE ferias (
     observacoes TEXT,
     aprovado_por UUID REFERENCES profiles(id),
     aprovado_em TIMESTAMP WITH TIME ZONE,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
@@ -179,7 +198,7 @@ CREATE TABLE atestados (
     validado BOOLEAN DEFAULT false,
     validado_por UUID REFERENCES profiles(id),
     validado_em TIMESTAMP WITH TIME ZONE,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
@@ -203,7 +222,7 @@ CREATE TABLE pontos (
     observacoes TEXT,
     ip_address INET,
     localizacao POINT,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
@@ -216,7 +235,7 @@ CREATE TABLE pontos (
 -- =====================================================
 CREATE TABLE configuracoes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    empresa_id UUID REFERENCES profiles(id) ON DELETE CASCADE UNIQUE,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE UNIQUE,
     backup_automatico BOOLEAN DEFAULT true,
     backup_intervalo INTEGER DEFAULT 24, -- horas
     notificacoes_email BOOLEAN DEFAULT true,

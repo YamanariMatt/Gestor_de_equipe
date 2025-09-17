@@ -1,20 +1,22 @@
 // Serviço de controle de acesso restrito
 // Apenas supervisores e gestores autorizados têm acesso ao sistema NEF
 
-// Lista de usuários autorizados (emails)
-export const AUTHORIZED_USERS = [
-  'felype.simones@nef.com.br',
-  'jose.felipe@nef.com.br', 
-  'maria.pereira@nef.com.br',
-  'julio.goncalves@nef.com.br'
+// Lista de emails autorizados para acesso ao sistema
+export const AUTHORIZED_EMAILS = [
+  'felypesimones@nefadv.com.br',
+  'jose.silva@extranef.com.br',
+  'juliogoncalves@nefadv.com.br',
+  'edielwinicius@nefadv.com.br',
+  'mariaoliveira@nefadv.com.br'
 ]
 
-// Lista de usernames autorizados
+// Lista de usernames autorizados (backup/alternativo)
 export const AUTHORIZED_USERNAMES = [
-  'Felype.Simones',
-  'Jose.Felipe',
-  'Maria.Pereira', 
-  'Julio.Goncalves'
+  'felypesimones',
+  'jose.silva',
+  'juliogoncalves',
+  'edielwinicius',
+  'mariaoliveira'
 ]
 
 // Roles autorizados

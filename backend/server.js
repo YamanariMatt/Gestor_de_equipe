@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const { authenticateToken, requireAuthorizedUser, validateEmpresa } = require('./middleware/auth');
@@ -15,7 +17,7 @@ const atestadosRoutes = require('./routes/atestados');
 const equipesRoutes = require('./routes/equipes');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 // Middlewares de segurança
 app.use(helmet());
@@ -34,8 +36,10 @@ app.use(limiter);
 
 // CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Body parsing
@@ -54,8 +58,27 @@ app.use('/api/equipes', equipesRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'EXTRANEF API está funcionando',
+    message: 'NEF API está funcionando',
+    version: '2.0.0',
+    environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Rota de informações da API
+app.get('/api/info', (req, res) => {
+  res.json({
+    name: 'NEF API',
+    version: '2.0.0',
+    description: 'Sistema de Gestão de Equipe',
+    endpoints: {
+      auth: '/api/auth',
+      funcionarios: '/api/funcionarios',
+      faltas: '/api/faltas',
+      ferias: '/api/ferias',
+      atestados: '/api/atestados',
+      equipes: '/api/equipes'
+    }
   });
 });
 
@@ -68,8 +91,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Aplicar middleware de autenticação e autorização a todas as rotas protegidas
-app.use('/api', authenticateToken, requireAuthorizedUser, validateEmpresa);
+// Aplicar middleware de autenticação e autorização a rotas protegidas
+// (exceto auth e health check)
+app.use('/api/funcionarios', authenticateToken, requireAuthorizedUser);
+app.use('/api/faltas', authenticateToken, requireAuthorizedUser);
+app.use('/api/ferias', authenticateToken, requireAuthorizedUser);
+app.use('/api/atestados', authenticateToken, requireAuthorizedUser);
+app.use('/api/equipes', authenticateToken, requireAuthorizedUser);
 
 // Middleware para rotas não encontradas
 app.use('*', (req, res) => {
@@ -80,9 +108,15 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor EXTRANEF rodando na porta ${PORT}`);
+  console.log('\n' + '='.repeat(50));
+  console.log('🚀 NEF - Sistema de Gestão de Equipe');
+  console.log('='.repeat(50));
+  console.log(`📡 Servidor rodando na porta: ${PORT}`);
   console.log(`📍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`📋 API Info: http://localhost:${PORT}/api/info`);
+  console.log(`🌐 CORS Origin: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+  console.log('='.repeat(50) + '\n');
 });
 
 module.exports = app;
