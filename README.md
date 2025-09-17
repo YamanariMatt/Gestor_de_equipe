@@ -47,28 +47,36 @@ O **NEF** é um sistema web profissional e moderno desenvolvido com React 18, No
 ### ✨ Características Principais
 
 - 🌐 **Aplicação Web**: Interface moderna e responsiva
-- 🔐 **Acesso Restrito**: Apenas 4 usuários pré-autorizados
-- ☁️ **Banco de Dados**: Supabase com Row Level Security
-- 📊 **Relatórios Avançados**: Dashboards e exportações
-- 🎨 **Interface Moderna**: Design com Tailwind CSS
-- 🛡️ **Segurança Robusta**: Múltiplas camadas de validação
+- 🔐 **Acesso Restrito**: Apenas 5 usuários pré-autorizados
+- ☁️ **Banco de Dados**: PostgreSQL via Supabase com Row Level Security
+- 📊 **Relatórios Avançados**: Dashboards interativos e exportações
+- 🎨 **Interface Moderna**: Design system com Tailwind CSS
+- 🛡️ **Segurança Robusta**: JWT, RLS e múltiplas camadas de validação
+- 🚀 **Monorepo**: Estrutura organizada com scripts automatizados
+- 📱 **Mobile-First**: Responsivo para todos os dispositivos
 
-### 🎯 Objetivo
+### 🎯 Objetivos do Sistema
 
-O sistema foi desenvolvido para empresas que precisam de um controle rigoroso de gestão de pessoal, com foco em:
-- **Segurança máxima** com acesso controlado
-- **Facilidade de uso** para supervisores e gestores
-- **Relatórios precisos** para tomada de decisões
-- **Escalabilidade** para crescimento futuro
+O NEF foi desenvolvido para organizações que necessitam de controle rigoroso na gestão de recursos humanos, oferecendo:
+
+- **🔒 Segurança Máxima**: Acesso controlado com autenticação JWT e RLS
+- **👥 Gestão Centralizada**: Controle completo de funcionários, equipes e hierarquias
+- **📈 Análises Precisas**: Relatórios detalhados para tomada de decisões estratégicas
+- **⚡ Performance**: Interface otimizada com carregamento rápido
+- **🔄 Escalabilidade**: Arquitetura preparada para crescimento organizacional
+- **📱 Acessibilidade**: Design responsivo para uso em qualquer dispositivo
 
 ### 👥 Usuários Autorizados
 
 | Nome | Email | Função | Status |
 |------|-------|--------|--------|
-| **Felype Simões** | felype.simones@empresa.com | Supervisor | ✅ Autorizado |
-| **José Felipe** | jose.felipe@empresa.com | Gestor | ✅ Autorizado |
-| **Maria Pereira** | maria.pereira@empresa.com | Gestora | ✅ Autorizado |
-| **Júlio Gonçalves** | julio.goncalves@empresa.com | Supervisor | ✅ Autorizado |
+| **Felype Simões** | felypesimones@nefadv.com.br | Supervisor | ✅ Autorizado |
+| **José Silva** | jose.silva@extranef.com.br | Supervisor | ✅ Autorizado |
+| **Júlio Gonçalves** | juliogoncalves@nefadv.com.br | Gerente | ✅ Autorizado |
+| **Ediel Winicius** | edielwinicius@nefadv.com.br | RH | ✅ Autorizado |
+| **Maria Oliveira** | mariaoliveira@nefadv.com.br | Supervisor | ✅ Autorizado |
+
+> ⚠️ **Importante**: O sistema possui controle de acesso rigoroso. Apenas estes 5 usuários podem fazer login e acessar todas as funcionalidades.
 
 ## 🚀 Funcionalidades Completas
 
@@ -208,8 +216,8 @@ O sistema NEF possui **acesso restrito** apenas para supervisores e gestores aut
 - Tailwind CSS IntelliSense
 - Auto Rename Tag
 - GitLens
-- **Conta Supabase** ([Criar conta gratuita](https://supabase.com))
-- **Conta Render** ([Criar conta gratuita](https://render.com)) - opcional para deploy
+- Bracket Pair Colorizer
+- Auto Import - ES6, TS, JSX, TSX
 
 ## 🛠️ Instalação e Configuração
 
@@ -217,11 +225,11 @@ O sistema NEF possui **acesso restrito** apenas para supervisores e gestores aut
 
 ```bash
 # Clone o repositório
-git clone <url-do-repositorio>
-cd nef
+git clone https://github.com/YamanariMatt/Gestor_de_equipe.git
+cd Gestor_de_equipe
 
 # Instale todas as dependências (backend + frontend)
-npm run install:all
+npm run setup
 ```
 
 ### 🔧 Passo 2: Configure o Supabase
@@ -233,9 +241,10 @@ npm run install:all
 3. **Preencha** os dados:
    - **Name**: `nef-sistema-gestao`
    - **Database Password**: Gere uma senha forte (anote!)
-   - **Region**: Escolha a mais próxima (ex: South America)
+   - **Region**: Escolha a mais próxima (ex: South America - São Paulo)
 4. **Clique** em "Create new project"
 5. **Aguarde** a criação (2-3 minutos)
+6. **Anote** a URL do projeto e as chaves de API
 
 #### 2.2 Configure o Banco de Dados
 
@@ -320,7 +329,7 @@ VITE_API_URL=http://localhost:3001
 
 # Configurações de Desenvolvimento
 VITE_APP_NAME=NEF
-VITE_APP_VERSION=1.0.0
+VITE_APP_VERSION=2.0.0
 ```
 
 ### 👥 Passo 4: Configure os Usuários Autorizados
@@ -332,17 +341,25 @@ VITE_APP_VERSION=1.0.0
 3. **Crie** cada usuário autorizado:
 
 ```
-Email: felype.simones@empresa.com
+Email: felypesimones@nefadv.com.br
 Password: [senha segura]
+Role: Supervisor
 
-Email: jose.felipe@empresa.com  
+Email: jose.silva@extranef.com.br
 Password: [senha segura]
+Role: Supervisor
 
-Email: maria.pereira@empresa.com
+Email: juliogoncalves@nefadv.com.br
 Password: [senha segura]
+Role: Gerente
 
-Email: julio.goncalves@empresa.com
+Email: edielwinicius@nefadv.com.br
 Password: [senha segura]
+Role: RH
+
+Email: mariaoliveira@nefadv.com.br
+Password: [senha segura]
+Role: Supervisor
 ```
 
 4. **Anote** os UUIDs gerados para cada usuário
@@ -383,11 +400,11 @@ npm run dev:frontend   # Frontend: http://localhost:5173
 #### 5.3 Produção
 
 ```bash
-# Build do frontend
-npm run build:frontend
+# Build completo (backend + frontend)
+npm run build
 
-# Inicia backend em produção
-npm run start:backend
+# Inicia em produção (backend + frontend)
+npm start
 ```
 
 ## 🔐 Configuração de Segurança
@@ -407,8 +424,8 @@ O sistema NEF possui **múltiplas camadas de segurança** para garantir acesso r
 - **Middleware de autenticação** em todas as rotas `/api`
 - **Verificação de token JWT** via Supabase
 - **Validação de perfil** e status ativo
-- **Controle de acesso por função** (admin, supervisor, gestor)
-- **Lista de usuários autorizados** hardcoded no middleware
+- **Controle de acesso por função** (admin, supervisor, gestor, gerente, rh)
+- **Lista de usuários autorizados** validada por email no middleware
 - **Endpoint de registro desabilitado** retornando erro 403
 - **Atualização de último login** para auditoria
 
@@ -430,10 +447,12 @@ O sistema registra automaticamente:
 ### ⚠️ **Importantes Observações de Segurança**
 
 1. **Registro Desabilitado**: A página de registro foi completamente desabilitada
-2. **Emails Autorizados**: O sistema verifica emails contra uma lista fixa
-3. **Funções de Acesso**: Apenas admin, supervisor e gestor têm acesso
-4. **Sessões Seguras**: Tokens JWT com expiração automática
-5. **Validação Dupla**: Frontend e backend validam independentemente
+2. **Emails Autorizados**: O sistema verifica emails contra uma lista fixa de 5 usuários
+3. **Roles Atualizadas**: Suporte para supervisor, gestor, gerente, rh e admin
+4. **Validação Dupla**: Por email (principal) e username (backup)
+5. **Middleware Robusto**: Autenticação JWT + validação de usuário autorizado
+6. **Sessões Seguras**: Tokens JWT com expiração automática
+7. **Isolamento de Dados**: Row Level Security (RLS) no Supabase
 
 ## ☁️ Deploy Completo
 
