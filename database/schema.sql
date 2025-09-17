@@ -10,24 +10,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- =====================================================
--- TABELA: profiles
--- Perfis de usuários (extensão da tabela auth.users do Supabase)
--- Tabela de perfis de usuário (estende auth.users do Supabase)
-CREATE TABLE profiles (
-    id UUID REFERENCES auth.users(id) PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    empresa_id UUID NOT NULL,
-    role VARCHAR(50) DEFAULT 'supervisor' CHECK (role IN ('admin', 'supervisor', 'gestor', 'gerente', 'rh')),
-    ativo BOOLEAN DEFAULT true,
-    primeiro_acesso BOOLEAN DEFAULT true,
-    ultimo_login TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- =====================================================
 -- TABELA: empresas
 -- Empresas/organizações do sistema
 -- =====================================================
@@ -39,6 +21,24 @@ CREATE TABLE empresas (
     telefone VARCHAR(20),
     email VARCHAR(255),
     ativo BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =====================================================
+-- TABELA: profiles
+-- Perfis de usuários (extensão da tabela auth.users do Supabase)
+-- =====================================================
+CREATE TABLE profiles (
+    id UUID REFERENCES auth.users(id) PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    empresa_id UUID REFERENCES empresas(id) ON DELETE CASCADE,
+    role VARCHAR(50) DEFAULT 'supervisor' CHECK (role IN ('admin', 'supervisor', 'gestor', 'gerente', 'rh')),
+    ativo BOOLEAN DEFAULT true,
+    primeiro_acesso BOOLEAN DEFAULT true,
+    ultimo_login TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -253,7 +253,7 @@ CREATE TABLE configuracoes (
 -- =====================================================
 
 -- Índices para profiles
-CREATE INDEX idx_profiles_empresa ON profiles(empresa);
+CREATE INDEX idx_profiles_empresa_id ON profiles(empresa_id);
 CREATE INDEX idx_profiles_role ON profiles(role);
 
 -- Índices para funcionarios
@@ -426,7 +426,10 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION criar_configuracao_padrao()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO configuracoes (empresa_id) VALUES (NEW.id);
+    -- Inserir configuração apenas se não existir para a empresa
+    INSERT INTO configuracoes (empresa_id) 
+    VALUES (NEW.empresa_id)
+    ON CONFLICT (empresa_id) DO NOTHING;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

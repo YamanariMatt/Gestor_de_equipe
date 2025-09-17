@@ -9,90 +9,50 @@ INSERT INTO empresas (id, nome, cnpj, endereco, telefone, email) VALUES
 -- =====================================================
 -- USUÁRIOS INICIAIS COM ACESSO RESTRITO
 -- =====================================================
--- Nota: Estes usuários devem ser criados via Supabase Auth primeiro
--- Depois seus perfis são inseridos aqui
+-- IMPORTANTE: Execute este script APENAS após criar os usuários no Supabase Auth!
+-- 
+-- PASSO A PASSO PARA CONFIGURAR USUÁRIOS:
+-- 
+-- 1. Acesse o painel do Supabase → Authentication → Users
+-- 2. Clique em "Add user" e crie cada usuário com os emails abaixo:
+--    - felypesimones@nefadv.com.br (Supervisor)
+--    - jose.silva@extranef.com.br (Supervisor)
+--    - juliogoncalves@nefadv.com.br (Gerente)
+--    - edielwinicius@nefadv.com.br (RH)
+--    - mariaoliveira@nefadv.com.br (Supervisor)
+--
+-- 3. Anote os UUIDs gerados para cada usuário
+-- 4. Execute os INSERTs abaixo substituindo os UUIDs pelos reais:
 
--- Usuários supervisores e gestores iniciais
--- IMPORTANTE: Estes IDs devem ser substituídos pelos IDs reais do Supabase Auth após criação
-
--- Felype Simões - Supervisor
+-- Felype Simões - Supervisor (UUID real do Supabase Auth)
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('11111111-1111-1111-1111-111111111111', 'Felype Simões', 'felypesimones@nefadv.com.br', 'felypesimones', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
+('eb7d3ee6-a6a0-4910-98ba-0db599bee4a9', 'Felype Simões', 'felypesimones@nefadv.com.br', 'felypesimones', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
 
--- José Silva - Supervisor
+/*
+-- OUTROS USUÁRIOS - Adicione conforme criar no Supabase Auth:
 INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('22222222-2222-2222-2222-222222222222', 'José Silva', 'jose.silva@extranef.com.br', 'jose.silva', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
-
--- Júlio Gonçalves - Gerente
-INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('33333333-3333-3333-3333-333333333333', 'Júlio Gonçalves', 'juliogoncalves@nefadv.com.br', 'juliogoncalves', '550e8400-e29b-41d4-a716-446655440000', 'gerente', true, true);
-
--- Ediel Winicius - RH
-INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('44444444-4444-4444-4444-444444444444', 'Ediel Winicius', 'edielwinicius@nefadv.com.br', 'edielwinicius', '550e8400-e29b-41d4-a716-446655440000', 'rh', true, true);
-
--- Maria Oliveira - Supervisor
-INSERT INTO profiles (id, nome, email, username, empresa_id, role, ativo, primeiro_acesso) VALUES 
-('55555555-5555-5555-5555-555555555555', 'Maria Oliveira', 'mariaoliveira@nefadv.com.br', 'mariaoliveira', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
+('UUID_REAL_DO_JOSE', 'José Silva', 'jose.silva@extranef.com.br', 'jose.silva', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true),
+('UUID_REAL_DO_JULIO', 'Júlio Gonçalves', 'juliogoncalves@nefadv.com.br', 'juliogoncalves', '550e8400-e29b-41d4-a716-446655440000', 'gerente', true, true),
+('UUID_REAL_DO_EDIEL', 'Ediel Winicius', 'edielwinicius@nefadv.com.br', 'edielwinicius', '550e8400-e29b-41d4-a716-446655440000', 'rh', true, true),
+('UUID_REAL_DA_MARIA', 'Maria Oliveira', 'mariaoliveira@nefadv.com.br', 'mariaoliveira', '550e8400-e29b-41d4-a716-446655440000', 'supervisor', true, true);
+*/
 
 -- =====================================================
--- EQUIPES DE EXEMPLO
+-- NOTA: EQUIPES E CARGOS
 -- =====================================================
-INSERT INTO equipes (id, nome, descricao, empresa_id, cor) VALUES
-(uuid_generate_v4(), 'Recursos Humanos', 'Departamento de gestão de pessoas', auth.uid(), '#e74c3c'),
-(uuid_generate_v4(), 'Tecnologia', 'Departamento de TI e desenvolvimento', auth.uid(), '#3498db'),
-(uuid_generate_v4(), 'Vendas', 'Equipe comercial e vendas', auth.uid(), '#2ecc71'),
-(uuid_generate_v4(), 'Marketing', 'Marketing e comunicação', auth.uid(), '#f39c12'),
-(uuid_generate_v4(), 'Financeiro', 'Departamento financeiro', auth.uid(), '#9b59b6'),
-(uuid_generate_v4(), 'Operações', 'Operações e logística', auth.uid(), '#34495e');
-
--- =====================================================
--- CARGOS DE EXEMPLO
--- =====================================================
-INSERT INTO cargos (id, nome, descricao, salario_base, nivel, empresa_id) VALUES
--- Recursos Humanos
-(uuid_generate_v4(), 'Analista de RH', 'Analista de recursos humanos', 4500.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Coordenador de RH', 'Coordenação da equipe de RH', 7000.00, 'coordenador', auth.uid()),
-(uuid_generate_v4(), 'Gerente de RH', 'Gerência do departamento de RH', 12000.00, 'gerente', auth.uid()),
-
--- Tecnologia
-(uuid_generate_v4(), 'Desenvolvedor Junior', 'Desenvolvedor de software iniciante', 3500.00, 'junior', auth.uid()),
-(uuid_generate_v4(), 'Desenvolvedor Pleno', 'Desenvolvedor de software experiente', 6500.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Desenvolvedor Senior', 'Desenvolvedor de software especialista', 10000.00, 'senior', auth.uid()),
-(uuid_generate_v4(), 'Tech Lead', 'Liderança técnica', 13000.00, 'coordenador', auth.uid()),
-(uuid_generate_v4(), 'CTO', 'Chief Technology Officer', 20000.00, 'diretor', auth.uid()),
-
--- Vendas
-(uuid_generate_v4(), 'Vendedor', 'Vendedor interno/externo', 3000.00, 'junior', auth.uid()),
-(uuid_generate_v4(), 'Consultor de Vendas', 'Consultor comercial', 5000.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Coordenador de Vendas', 'Coordenação da equipe comercial', 8000.00, 'coordenador', auth.uid()),
-(uuid_generate_v4(), 'Gerente Comercial', 'Gerência comercial', 15000.00, 'gerente', auth.uid()),
-
--- Marketing
-(uuid_generate_v4(), 'Analista de Marketing', 'Analista de marketing digital', 4000.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Designer Gráfico', 'Designer e criação visual', 3800.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Coordenador de Marketing', 'Coordenação de marketing', 7500.00, 'coordenador', auth.uid()),
-
--- Financeiro
-(uuid_generate_v4(), 'Assistente Financeiro', 'Assistente do departamento financeiro', 2800.00, 'junior', auth.uid()),
-(uuid_generate_v4(), 'Analista Financeiro', 'Analista financeiro', 5500.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Controller', 'Controladoria financeira', 12000.00, 'gerente', auth.uid()),
-
--- Operações
-(uuid_generate_v4(), 'Assistente Operacional', 'Assistente de operações', 2500.00, 'junior', auth.uid()),
-(uuid_generate_v4(), 'Analista de Operações', 'Analista operacional', 4200.00, 'pleno', auth.uid()),
-(uuid_generate_v4(), 'Coordenador de Operações', 'Coordenação operacional', 6800.00, 'coordenador', auth.uid());
+-- Equipes e cargos serão cadastrados diretamente pelo sistema
+-- Não há dados de exemplo aqui - use a interface web para cadastrar
 
 -- =====================================================
 -- HORÁRIOS DE EXEMPLO
 -- =====================================================
 INSERT INTO horarios (id, nome, hora_inicio, hora_fim, intervalo_inicio, intervalo_fim, dias_semana, empresa_id) VALUES
-(uuid_generate_v4(), 'Comercial - 8h às 18h', '08:00:00', '18:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', auth.uid()),
-(uuid_generate_v4(), 'Comercial - 9h às 18h', '09:00:00', '18:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', auth.uid()),
-(uuid_generate_v4(), 'Meio Período - Manhã', '08:00:00', '12:00:00', NULL, NULL, '{1,2,3,4,5}', auth.uid()),
-(uuid_generate_v4(), 'Meio Período - Tarde', '14:00:00', '18:00:00', NULL, NULL, '{1,2,3,4,5}', auth.uid()),
-(uuid_generate_v4(), 'Flexível - 6h diárias', '09:00:00', '16:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', auth.uid()),
-(uuid_generate_v4(), 'Plantão - Fins de Semana', '08:00:00', '17:00:00', '12:00:00', '13:00:00', '{6,7}', auth.uid());
+(uuid_generate_v4(), 'Comercial - 8h às 18h', '08:00:00', '18:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', '550e8400-e29b-41d4-a716-446655440000'),
+(uuid_generate_v4(), 'Comercial - 9h às 18h', '09:00:00', '18:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', '550e8400-e29b-41d4-a716-446655440000'),
+(uuid_generate_v4(), 'Meio Período - Manhã', '08:00:00', '12:00:00', NULL, NULL, '{1,2,3,4,5}', '550e8400-e29b-41d4-a716-446655440000'),
+(uuid_generate_v4(), 'Meio Período - Tarde', '14:00:00', '18:00:00', NULL, NULL, '{1,2,3,4,5}', '550e8400-e29b-41d4-a716-446655440000'),
+(uuid_generate_v4(), 'Flexível - 6h diárias', '09:00:00', '16:00:00', '12:00:00', '13:00:00', '{1,2,3,4,5}', '550e8400-e29b-41d4-a716-446655440000'),
+(uuid_generate_v4(), 'Plantão - Fins de Semana', '08:00:00', '17:00:00', '12:00:00', '13:00:00', '{6,7}', '550e8400-e29b-41d4-a716-446655440000');
 
 -- =====================================================
 -- TIPOS DE FALTA COMUNS (para referência)
